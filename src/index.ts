@@ -1,26 +1,19 @@
-import fs from 'fs';
 import admin from 'firebase-admin';
-import https from "https";
-import url from "url";
-import YAML from "yaml";
+import {RateSender} from "./classes/rate-sender";
+import {Util} from "./classes/util";
+
 
 const configDir = __dirname + '/../config';
-const yamlString = fs.readFileSync(`${configDir}/application.yaml`, 'utf8');
-const config = YAML.parse(yamlString);
+const config = Util.config();
 
 admin.initializeApp({
     credential: admin.credential.cert(require(`${configDir}/sdk.json`)),
     databaseURL: config['fb-databaseURL']
 });
 
-function sendMessage(rates: any[], code: String): void {
-    let rate: any = {};
-    for (let val of rates) {
-        if (val['currencyPairCode'] == code) {
-            rate = val;
-            break;
-        }
-    }
+async function sendMessage(code: string) {
+    let sender: RateSender = new RateSender();
+    let rate: any = await sender.rate(code);
 
     let message = {
         notification: {
@@ -43,17 +36,5 @@ function sendMessage(rates: any[], code: String): void {
     });
 }
 
-let options = url.parse(config['rate-url']);
-let req = https.request(options, (response) => {
-    response.setEncoding('utf8');
-    let responseBody = '';
-    response.on('data', (chunk) => {
-        responseBody += chunk;
-    });
-    response.on('end', () => {
-        let decoded = JSON.parse(responseBody);
-        sendMessage(decoded['quotes'], 'USDJPY');
-    });
-});
-
-req.end();
+const code = 'USDJPY';
+sendMessage(code);
