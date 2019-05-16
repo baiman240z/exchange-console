@@ -8,9 +8,7 @@
   },
   "dependencies": {
     "firebase-admin": "^7.3.0",
-    "yaml": "^1.5.1"
-  },
-  "devDependencies": {
+    "yaml": "^1.5.1",
     "@types/node": "^12.0.0",
     "@types/yaml": "^1.0.2",
     "typescript": "^3.4.5"
