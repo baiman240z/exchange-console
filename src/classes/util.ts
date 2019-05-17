@@ -6,11 +6,7 @@ export class Util {
         return __dirname + '/../../';
     }
 
-    static async sleep(sec: number): Promise<void> {
-        await this._sleep(sec);
-    }
-
-    private static async _sleep(sec: number): Promise<void> {
+    public static async sleep(sec: number): Promise<void> {
         return new Promise(
             resolve => {
                 setTimeout(resolve, sec * 1000);
