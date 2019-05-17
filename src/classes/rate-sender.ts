@@ -6,7 +6,7 @@ import admin from 'firebase-admin';
 export class RateSender {
 
     private _loaded: boolean = false;
-    private _rate: {[index: string]: object} = {};
+    private _rate: { [index: string]: object } = {};
 
     constructor() {
     }
@@ -25,14 +25,14 @@ export class RateSender {
                     resolve(responseBody);
                 });
                 response.on('error', (e) => {
-                   reject(e);
+                    reject(e);
                 });
             });
             request.end();
         });
     }
 
-    private async load() {
+    private async load(): Promise<void> {
         let json: string = await this.readJson();
         let decoded = JSON.parse(json);
         let quotes: any[] = decoded['quotes'];
