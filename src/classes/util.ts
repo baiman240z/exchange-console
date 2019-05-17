@@ -2,6 +2,10 @@ import fs from "fs";
 import YAML from "yaml";
 
 export class Util {
+    static baseDir(): string {
+        return __dirname + '/../../';
+    }
+
     static async sleep(sec: number): Promise<void> {
         await this._sleep(sec);
     }
