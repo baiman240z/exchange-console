@@ -2,13 +2,11 @@ import {Util} from "./util";
 import url from "url";
 import https from "https";
 import admin from 'firebase-admin';
-import App = admin.app.App;
 
 export class RateSender {
 
     private _loaded: boolean = false;
     private _rate: { [index: string]: object } = {};
-    private _app: App|null = null;
 
     constructor() {
     }
@@ -53,8 +51,8 @@ export class RateSender {
 
     public async send(pairCode: string): Promise<string> {
         const config = Util.config();
-        if (this._app == null) {
-            this._app = admin.initializeApp({
+        if (admin.apps.length === 0) {
+            admin.initializeApp({
                 credential: admin.credential.cert(require(`${Util.baseDir()}/config/sdk.json`)),
                 databaseURL: config['fb-databaseURL']
             });
